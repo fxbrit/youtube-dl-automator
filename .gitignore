@@ -1,0 +1,5 @@
+.DS_Store
+venv
+.vscode
+channels.txt
+__pycache__
