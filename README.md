@@ -7,6 +7,7 @@ Given a list of channels using their [invidious](https://redirect.invidious.io/)
 I don't like interacting with youtube, or any platform that contains invasive tracking. Simple as that.
 
 I decided to scrape invidious because google doesn't like when you scrape its websites. Please note that this tool should be used **behind a VPN** in order to mask your IP and prevent youtube from getting your IP, and then use it to track you and/or ban you (they don't like youtube-dl).
+Instead, the script downloads from youtube in order to get the highest quality possible on videos.
 
 ## How to
 Clone the repository:
