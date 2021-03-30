@@ -1,5 +1,5 @@
 .DS_Store
 venv
 .vscode
-channels.txt
 __pycache__
+feeds.txt
