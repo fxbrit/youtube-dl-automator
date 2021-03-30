@@ -1,80 +1,70 @@
 from __future__ import unicode_literals
-from bs4 import BeautifulSoup
 import requests
+import xml.etree.ElementTree as ET
 import youtube_dl
 import os
 from pathlib import Path
 
 
-def download_videos():
-    dir = str(Path.home()) + os.sep + "youtube-dl-automator" + os.sep
-    if not os.path.isdir(dir):
-        os.makedirs(dir)
-    channels = get_channels()
-    get_urls(channels)
+def get_feeds():
 
+    rss_feeds = []
+    channels = []
+    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
+    headers = {"User-Agent": user_agent}
+    w3 = "{http://www.w3.org/2005/Atom}"
+    cwd = os.getcwd()
+    filename = cwd + os.sep + "feeds.txt"
 
-def get_channels():
-    if os.path.isfile("channels.txt"):
-        with open("channels.txt", "r") as f:
-            channels = f.read().split("\n")
-    else:
-        print("add channels.")
+    with open(filename, "r") as f:
+        rss_feeds = f.read().split("\n")
+
+    for r in rss_feeds:
+        channel = {"name": "", "latest_upload": "", "uploads": []}
+        r = requests.get(r, timeout=50, headers=headers)
+        r.raise_for_status()
+        r.encoding = r.apparent_encoding
+        root = ET.fromstring(r.content)
+        i = 0
+        for c in root.iter():
+            if (c.tag == w3 + "name") and (i == 2):
+                channel["name"] = c.text
+            if c.tag == w3 + "link":
+                i += 1
+                if i == 3:
+                    channel["latest_upload"] = c.attrib["href"]
+                elif i > 3:
+                    channel["uploads"].append(c.attrib["href"])
+        channels.append(channel)
+
     return channels
 
 
-def get_urls(channels):
-    urls = []
-    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
-    headers = {"User-Agent": user_agent}
+def download(channels):
+
     ydl_opts = {}
 
     for c in channels:
-        r = requests.get(c, timeout=50, headers=headers)
-        r.raise_for_status()
-        r.encoding = r.apparent_encoding
 
-        soup = BeautifulSoup(r.content, "html.parser")
-
-        for div in soup.findAll("div", {"class": "channel-profile"}):
-            channel = div.find("span")
-
-        dir = (
-            str(Path.home())
-            + os.sep
-            + "youtube-dl-automator"
-            + os.sep
-            + str(channel)[6:-7]
-        )
+        dir = str(Path.home()) + os.sep + "youtube-dl-automator" + os.sep + c["name"]
         if not os.path.isdir(dir):
             os.makedirs(dir)
-
         os.chdir(dir)
 
-        for i, div in enumerate(
-            soup.findAll("div", {"class": "pure-u-1 pure-u-md-1-4"})
-        ):
-            for p in div.findAll("p"):
-                for a in p.findAll("a", {"title": "Audio mode"}, href=True):
-                    urls.append(
-                        "https://youtube.com/" + str(a["href"]).split("&", 1)[0] + "\n"
-                    )
-            if os.path.isfile(".last"):
-                with open(".last", "r", encoding="utf-8") as f:
-                    last = f.read()
-                if last == urls[0]:
-                    print(str(channel)[6:-7] + " hasn't uploaded new videos.")
-                    urls = []
-                    break
-            if i == 0:
-                with open(".last", "w", encoding="utf-8") as f:
-                    f.write(urls[0])
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download(urls)
-                    urls = []
-                break
+        if os.path.isfile(".last"):
+            with open(".last", "r", encoding="utf-8") as f:
+                last = f.read()
+            if last == c["latest_upload"]:
+                print(c["name"] + " hasn't uploaded new videos.")
+                continue
 
-    return
+        try:
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([c["latest_upload"]])
+            with open(".last", "w", encoding="utf-8") as f:
+                f.write(c["latest_upload"])
+        except Exception as e:
+            print(e)
 
 
-download_videos()
+download(get_feeds())
