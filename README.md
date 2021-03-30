@@ -1,14 +1,14 @@
 # youtube-dl-automator
 Script that automatically downloads youtube videos whitout you ever visiting the website, and organizes them in a convenient way.
 
-Given a list of channels feeds, the script retrieves the xml of the channel's feed, and then downloads the most recent video from youtube using [youtube-dl](https://youtube-dl.org/). The videos are then saved in `~/youtube-dl-automator`, each one in a directory which has the same name as the channel, in order to have a sort of ordered and directory-based library. In this way you can have automatic downloads of the latest uploads of your favourite channels without ever visiting youtube, by running the script everytime you want or by automating its execution after a given amount of time using, for example, [cron](https://man7.org/linux/man-pages/man5/crontab.5.html).
+Given a list of channel feeds, the script retrieves the xml of the channel's feeds, and then downloads the most recent video from youtube using [youtube-dl](https://youtube-dl.org/). The videos are then saved in `~/youtube-dl-automator`, each one in a directory which has the same name as the channel, in order to have a sort of ordered and directory-based library. In this way you can have automatic downloads of the latest uploads of your favourite channels without ever visiting youtube, by running the script everytime you want or by automating its execution after a given amount of time using, for example, [cron](https://man7.org/linux/man-pages/man5/crontab.5.html).
 
 ## Why
 I don't like interacting with youtube frontend, or any platform that contains invasive tracking. Simple as that.
 
 I decided to switch to the RSS feed as invidious instances are often being blocked. The script downloads from youtube in order to get the highest quality possible on videos.
 
-Please note that this tool should be used **behind a VPN** in order to mask your IP and prevent youtube from getting your IP, and then use it to track you and/or ban you (they don't like youtube-dl). You are contacting youtube server both by fetching the feed and by downloading the video so be aware of that. However by not accessing youtube frontend you are avoiding a ton of trackers and cookies, as well as saving time and bandwidth by avoiding ads.
+Please note that this tool should be used **behind a VPN** in order to mask your IP and prevent youtube from getting it, and then use it to track you and/or ban you (they don't like youtube-dl). You are contacting youtube servers both by fetching the feed and by downloading the video so be aware of that. However by not accessing youtube frontend you are avoiding a ton of trackers and cookies, as well as saving time and bandwidth by avoiding ads.
 
 ## How to
 Clone the repository:
@@ -32,6 +32,6 @@ I noticed that `youtube-dl` is not really stable when used in python and it can 
 ## Legacy
 I will no longer be scraping invidious as the downtimes were too frequent and made the script basically useless some days. I decided to leave the old script in `./legacy` in case someone wants to use it or edit it. Below I'll also include a section of the old readme, check the history of the repo for more details.
 
-`Given a list of channels using their invidiouslinks, the script scrapes the url of the last uploaded video on each channel, and then downloads it from youtube using youtube-dl.
+`Given a list of channels using their invidious links, the script scrapes the url of the last uploaded video on each channel, and then downloads it from youtube using youtube-dl.
 I decided to scrape invidious because google doesn't like when you scrape its websites. Instead, the script downloads from youtube in order to get the highest quality possible on videos.
 Issues are often caused by invidious instances which unfortunately tend to be banned by youtube, or can generally be unresponsive when under heavy load. In that case the http request will return an error and if that happens too often consider changing instance, at least temporarely.`
