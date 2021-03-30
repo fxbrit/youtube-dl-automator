@@ -21,7 +21,7 @@ invidious.xyz/channel/uhanothergoodchannel
 ```
 
 After this you can simply enter `python3 main.py`, just remember to install the required dependencies.
-If you want to automate the execution enter `crontab -e` and then add a line like `* */6 * * * /path/to/youtube-dl-automator/main.py`. This line for instance will check the channels every 6 hours and download the last upload in case it is new (new means that you haven't downloaded it using `youtube-dl-automator`, the script uses a file to keep track of it).
+If you want to automate the execution enter `crontab -e` and then add a line like `* */6 * * * /usr/bin/python3 /path/to/youtube-dl-automator/main.py`. This line for instance will check the channels every 6 hours and download the last upload in case it is new (new means that you haven't downloaded it using `youtube-dl-automator`, the script uses a file to keep track of it).
 
 #### Tweaks
 Currently the script is set to check only for the last upload. You can change this in the source code if you wish to download or check for more videos at the same time. For example this could be useful if you want to download the last 20 uploads of a channel the first time you add it to your channels file.
