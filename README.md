@@ -28,8 +28,6 @@ If you want to automate the execution with **cron** enter `crontab -e` and then 
 ## Troubleshooting
 If a download went wrong and the script isn't able to re-download, deleting `.last` will likely fix the issue. The script itself handles it a bit better now, so it shouldn't occur, or at least not as often.
 
-I noticed that `youtube-dl` is not really stable when used in python and it can return errors unrelated to the script or to invidious. If you notice this please consider reporting it to the youtube-dl team, I'm sure they would appreciate contributions.
-
 ## Legacy
 I will no longer be scraping invidious as the downtimes were too frequent and made the script basically useless some days. I decided to leave the old script in `./legacy` in case someone wants to use it or edit it. Below I'll also include a section of the old readme, check the history of the repo for more details.
 
